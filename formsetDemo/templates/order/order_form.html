@@ -1,0 +1,87 @@
+{% load bootstrap4 %}
+{% load static %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{# Display a form #}
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {% for field in form %}
+      {% if field.id_for_label == 'id_customer_name' %}
+      <div class="form-row">
+          <label class="" for="id_customer_name">Customer Name</label>
+          <div class="colM">
+          {{field}}
+          </div>
+      </div>
+      {% elif field.id_for_label == 'id_customer_address' %}
+      <div class="form-row">
+          <label class="" for="id_customer_address">Customer Address</label>
+          <div class="colM">
+          {{field}}
+          </div>
+      </div>
+      {% elif field.id_for_label == 'id_customer_phone' %}
+      <div class="form-row">
+          <label class="" for="id_customer_phone">Customer Phone</label>
+          <div class="colM">
+          {{field}}
+          </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+    {{ particulars_form.management_form }}
+    {{ particulars_form.non_form_errors }}
+    {% for form in particulars_form %}
+      {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+      {% endfor %}
+      <div class="inline {{ particulars_form.prefix }}">
+        {% for field in form %}
+          {% if field.label == 'Item name'%}
+            <div class="row mb-4">
+              <div class="col-sm-4 col-form-label">{{ field.label }}</div>
+              <div class="col-sm-8">{{ field }}</div>
+            </div>
+          {% elif field.label == 'Price' %}
+            <div class="row mb-4">
+              <div class="col-sm-4 col-form-label">{{ field.label }}</div>
+              <div class="col-sm-8">{{ field }}</div>
+            </div>
+          {% elif field.label == 'Quantity' %}
+          <div class="row mb-4">
+            <div class="col-sm-4 col-form-label">{{ field.label }}</div>
+            <div class="col-sm-8">{{ field }}</div>
+          </div>
+          {% elif field.label == 'Total' %}
+          <div class="row mb-4">
+            <div class="col-sm-4 col-form-label">{{ field.label }}</div>
+            <div class="col-sm-8">{{ field }}</div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+    
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">
+        Submit
+      </button>
+    {% endbuttons %}
+  </form>
+  <script src="{% static 'js/jquery.formset.js' %}"></script>
+  <script type="text/javascript">
+    $(".inline.{{ particulars_form.prefix }}").formset({
+      prefix: "{{ particulars_form.prefix }}", // The form prefix for your django formset
+      addCssClass: "btn btn-primary", // CSS class applied to the add link
+      addText: 'Add Item', // Text for the add link
+      //deleteCssClass: "btn btn-block btn-primary bordered", // CSS class applied to the delete link
+      deleteText: 'Remove', // Text for the delete link
+      formCssClass: 'inline-form' // CSS class applied to each form in a formset
+  })
+  </script>

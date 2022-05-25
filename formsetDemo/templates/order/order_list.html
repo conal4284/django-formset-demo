@@ -1,0 +1,56 @@
+{% load bootstrap4 %}
+{% load static %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+<table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+    <thead>
+      <tr>
+        <th class="text-center" style="width: 80px;">#</th>
+        <th class="d-none d-sm-table-cell" style="width: 30%;">Customer Name</th>
+        <th class="d-none d-sm-table-cell" style="width: 30%;">Customer Address</th>
+        <th class="d-none d-sm-table-cell" style="width: 30%;">Customer Phone</th>
+        <th class="d-none d-sm-table-cell" style="width: 15%;">Order Particulars</th>
+        <th style="width: 15%;">Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for object in object_list %}
+            <tr>
+                <td class="text-center">{{object.id}}</td>
+                <td class="text-center">{{object.customer_name}}</td>
+                <td class="fw-semibold">{{object.customer_address}}</td>
+                <td class="d-none d-sm-table-cell">{{object.customer_phone}}</td>
+                <td class="d-none d-sm-table-cell">
+                    <table tableborder="1">
+                        <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>Item Name</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for obj in object.orderparticulars_set.all %}
+                            <tr>
+                                <td>{{obj.order.id}}</td>
+                                <td>{{obj.item_name}}</td>
+                                <td>{{obj.price}}</td>
+                                <td>{{obj.quantity}}</td>
+                                <td>{{obj.total}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+                <td><a href="{% url 'update_order' pk=object.id %}">Edit</a></td>
+              </tr>
+        {% endfor %}
+    </tbody>
+  </table>
